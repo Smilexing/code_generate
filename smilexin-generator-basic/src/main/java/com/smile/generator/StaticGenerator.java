@@ -10,6 +10,15 @@ import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 
 public class StaticGenerator {
+    public static void main(String[] args) {
+
+        String projectPath = System.getProperty("user.dir");
+        File parentFile = new File(projectPath);
+
+        String inputPath = new File(parentFile,"smilexin-generator-demo-projects" + File.separator + "acm-template").getAbsolutePath();
+        String outputPath = projectPath;
+        copyFilesByHutool(inputPath, outputPath);
+    }
     /**
      * 拷贝文件（Hutool 实现，会将输入目录完整拷贝到输出目录下）
      * @param inputPath
@@ -17,15 +26,6 @@ public class StaticGenerator {
      */
     public static void copyFilesByHutool(String inputPath, String outputPath) {
         FileUtil.copy(inputPath, outputPath, false);
-    }
-    public static void main(String[] args) {
-
-        String projectPath = System.getProperty("user.dir");
-        File parentFile = new File(projectPath);
-
-        String inputPath = new File(parentFile,"smilexin-generator-demo-projects/acm-tempate").getAbsolutePath();
-        String outputPath = projectPath;
-        copyFilesByHutool(inputPath, outputPath);
     }
 
     /**

@@ -5,10 +5,10 @@ import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.Writer;
+import java.io.*;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 /**
  * 动态文件生成
@@ -16,13 +16,9 @@ import java.io.Writer;
 public class DynamicGenerator {
     public static void main(String[] args) throws IOException, TemplateException {
 
-        String projectPath = System.getProperty("user.dir") + File.separator + "smilexin-generator-basic";;
-        File parentFile = new File(projectPath).getParentFile();
-//        String inputPath = projectPath + File.separator + "src/main/resources/templates/MainTemplate.java.ftl";  //src/main/resources/templates/MainTemplate.java.ftl
-        String inputPath = projectPath + File.separator + "src\\main\\resources\\templates\\MainTemplate.java.ftl";
-        File file = new File(parentFile,"src/main/resources/templates");
-        System.out.println(file.getAbsoluteFile());
-
+        // 当前idea打开的窗口
+        String projectPath = System.getProperty("user.dir");
+        String inputPath = projectPath + File.separator + "src/main/resources/templates/MainTemplate.java.ftl";
         String outputPath = projectPath + File.separator + "MainTemplate2.java";
         MainTemplateConfig mainTemplateConfig = new MainTemplateConfig();
         // 这次使用循环
@@ -30,14 +26,18 @@ public class DynamicGenerator {
         mainTemplateConfig.setAuthor("牛啤");
         mainTemplateConfig.setOutputText("求和结果：");
 
-        // 确保目录存在，如果不存在则创建它
-        File templatesDirectory = new File(projectPath + File.separator + "src\\main\\resources\\templates");
-        if (!templatesDirectory.exists()) {
-            templatesDirectory.mkdirs(); // 创建目录
-        }
-
         doGenerate(inputPath, outputPath, mainTemplateConfig);
     }
+/*        String projectPath = System.getProperty("user.dir") + File.separator + "smilexin-generator-basic";;
+        File parentFile = new File(projectPath).getParentFile();
+//        String inputPath = projectPath + File.separator + "src/main/resources/templates/MainTemplate.java.ftl";  //src/main/resources/templates/MainTemplate.java.ftl
+        String inputPath = projectPath + File.separator + "src\\main\\resources\\templates\\MainTemplate.java.ftl";
+        File file = new File(parentFile,"src/main/resources/templates");*/
+
+        //        System.out.println(file.getAbsoluteFile());
+
+//        String outputPath = projectPath + File.separator + "MainTemplate2.java";
+
 
     public static void doGenerate(String inputPath, String outputPath, Object model) throws IOException, TemplateException {
         // new 出 Configuration 对象，参数为 FreeMarker 版本号
@@ -57,7 +57,7 @@ public class DynamicGenerator {
         // 创建数据模型，从Main方法传递过来⏬
 
         // 生成
-        Writer out = new FileWriter(outputPath);
+        BufferedWriter out = new BufferedWriter(new OutputStreamWriter(Files.newOutputStream(Paths.get(outputPath)), StandardCharsets.UTF_8));
         template.process(model, out);
 
         // 生成后关闭文件
