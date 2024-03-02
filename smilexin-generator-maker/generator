@@ -1,0 +1,3 @@
+@echo off
+java -jar target/smilexin-generator-maker-1.0-SNAPSHOT-jar-with-dependencies.jar %*
+
